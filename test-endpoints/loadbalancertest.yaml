@@ -1,0 +1,154 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: echoserver-sidecar-networkloadbalancer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: echoserver
+        ssl: sidecar
+        lb: networkloadbalancer
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: echo-tls
+      containers:
+        - name: nginx
+          image: pbrumblay/tls-sidecar
+          ports:
+          - containerPort: 443
+          volumeMounts:
+          - mountPath: /etc/nginx/ssl
+            name: secret-volume
+        - name: echo-server
+          imagePullPolicy: Always
+          env:
+          - name: BOGUS
+            value: "YES"
+          image: pbrumblay/echo-server
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: 100m
+              memory: "150Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echoserver-sidecar-networkloadbalancer
+spec:
+  selector:
+    app: echoserver
+    ssl: sidecar
+    lb: networkloadbalancer
+  ports:
+    - protocol: "TCP"
+      port: 443
+      targetPort: 443
+  type: LoadBalancer
+  sessionAffinity: None
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: echoserver-nossl-networkloadbalancer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: echoserver
+        ssl: nossl
+        lb: networkloadbalancer
+    spec:
+      containers:
+        - name: echo-server
+          imagePullPolicy: Always
+          image: gcr.io/llbdevcluster/echo-server-example:a30c778-41
+          env:
+          - name: BOGUS
+            value: "YES"
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: 100m
+              memory: "150Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echoserver-nossl-networkloadbalancer
+spec:
+  selector:
+    app: echoserver
+    ssl: nossl
+    lb: networkloadbalancer
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+  sessionAffinity: None
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: echoserver-https-httpsloadbalancer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: echoserver
+        ssl: httpslb
+        lb: httpslb
+    spec:
+      containers:
+        - name: echo-server
+          imagePullPolicy: Always
+          image: gcr.io/llbdevcluster/echo-server-example:a30c778-41
+          env:
+          - name: BOGUS
+            value: "YES"
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: 100m
+              memory: "150Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echoserver-https-httpsloadbalancer
+spec:
+  selector:
+    app: "echoserver"
+    ssl: "httpslb"
+    lb: "httpslb"
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: echoserver-https-httpsloadbalancer
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  tls:
+  - secretName: echo-tls
+  backend:
+    serviceName: echoserver-https-httpsloadbalancer
+    servicePort: 8080

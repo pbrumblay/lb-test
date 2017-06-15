@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: locust-worker-lbtest
+  labels:
+    name: locust-lbtest
+    role: worker
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        name: locust-lbtest
+        role: worker
+    spec:
+      containers:
+        - name: locust-lbtest
+          image: pbrumblay/locust-lbtest:latest
+          env:
+            - name: LOCUST_MODE
+              value: worker
+            - name: LOCUST_MASTER
+              value: locust-master-lbtest
+            - name: TARGET_HOST
+              value: http://this.is.ignored.com
