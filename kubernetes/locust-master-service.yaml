@@ -7,7 +7,7 @@ metadata:
     role: master
 spec:
   ports:
-    - port: 8089
+    - port: 8089 # Web UI PORT
       targetPort: loc-master-web
       protocol: TCP
       name: loc-master-web

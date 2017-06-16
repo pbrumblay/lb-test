@@ -1,3 +1,4 @@
+# You will need to set these endpoints up in a SEPARATE CLUSTER and
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -25,9 +26,6 @@ spec:
             name: secret-volume
         - name: echo-server
           imagePullPolicy: Always
-          env:
-          - name: BOGUS
-            value: "YES"
           image: pbrumblay/echo-server
           ports:
             - name: http
@@ -69,10 +67,7 @@ spec:
       containers:
         - name: echo-server
           imagePullPolicy: Always
-          image: gcr.io/llbdevcluster/echo-server-example:a30c778-41
-          env:
-          - name: BOGUS
-            value: "YES"
+          image: pbrumblay/echo-server
           ports:
             - name: http
               containerPort: 8080
@@ -113,10 +108,7 @@ spec:
       containers:
         - name: echo-server
           imagePullPolicy: Always
-          image: gcr.io/llbdevcluster/echo-server-example:a30c778-41
-          env:
-          - name: BOGUS
-            value: "YES"
+          image: pbrumblay/echo-server
           ports:
             - name: http
               containerPort: 8080

@@ -15,11 +15,17 @@ spec:
     spec:
       containers:
         - name: locust-lbtest
-          image: pbrumblay/locust-lbtest:latest
+          image: pbrumblay/locust-lbtest
           env:
             - name: LOCUST_MODE
               value: worker
             - name: LOCUST_MASTER
               value: locust-master-lbtest
-            - name: TARGET_HOST
+            - name: TARGET_HOST # not needed if you specify full urls in your tests
               value: http://this.is.ignored.com
+            - name: NOSSLURL
+              value: http://<IP OF NLB WITHOUT SSL ENDPOINT>/ssl/nosslno
+            - name: SIDECARURL
+              value: http://<IP OF NLB WITH SSL SIDECAR>/ssl/sidecar
+            - name: HTTPSLBURL
+              value: http://<IP OF HTTPSLB ENDPOINT (FROM INGRESS)>/ssl/httpslb
