@@ -62,3 +62,13 @@ Make sure that the pods come up without error.
 
 ![Load balancer spike](https://github.com/pbrumblay/lb-test/blob/master/spike.png)
 
+## Troubleshooting the load test configuration
+If you have trouble getting the locust slaves and master working together, try:
+* Scale down the slaves to 0
+* Scale down the master to 0
+* Wait for all pods to terminate
+* Scale the master up to 1
+* Wait for it to come up and for its web UI to be available
+* Scale the slaves up to 3
+* The master's WEB UI should report 3 workers (slaves) before you start a test.
+
