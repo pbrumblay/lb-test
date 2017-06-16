@@ -8,7 +8,7 @@
 
 ## Basic Information
 We'll be generating load in a BACKEND cluster using http://locust.io. We will
-servicing the load using 3 load balancer configurations.
+create load using 3 load balancer configurations.
 1. Kubernetes Service Type of LoadBalancer
 1. Kubernetes Service Type of LoadBalancer with an NGINX side car for TLS termination
 1. Kubernetes Ingress with a GCP HTTPS loadbalancer.
@@ -31,7 +31,7 @@ Make note of the ingress IP used in the HTTP load balancer.
 Ensure that the pods come up without error.
 
 ## Set up the BACKEND GKE cluster
-1. Return to the root of where you cloned lb-test. (i.e. "cd .."")
+1. Return to the root of where you cloned lb-test. (i.e. "cd ..")
 1. cd lb-test/kubernetes
 1. Connect to and authenticate with the BACKEND GKE cluster. We'll set up our locust
 load generators here.
