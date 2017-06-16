@@ -1,4 +1,4 @@
-# Tests out the performance characteristics of the google load balancers
+# Testing out the performance characteristics of the google load balancers
 
 * Dockerfile - builds a locust master/worker image
 * kubernetes - configuration of masters/workers
