@@ -24,9 +24,9 @@ spec:
             - name: NOSSLURL
               value: http://<IP OF NLB WITHOUT SSL ENDPOINT>/ssl/nosslno
             - name: SIDECARURL
-              value: http://<IP OF NLB WITH SSL SIDECAR>/ssl/sidecar
+              value: https://<IP OF NLB WITH SSL SIDECAR>/ssl/sidecar
             - name: HTTPSLBURL
-              value: http://<IP OF HTTPSLB ENDPOINT (FROM INGRESS)>/ssl/httpslb
+              value: https://<IP OF HTTPSLB ENDPOINT (FROM INGRESS)>/ssl/httpslb
           ports:
             - name: loc-master-web
               containerPort: 8089
