@@ -59,3 +59,6 @@ Make sure that the pods come up without error.
 1. Connect to the master endpoint at http://`<`IP from backend locust-master-lbtest service`>`:8089
 1. Generate load using 50 slaves with a hatch rate of 5 per second.
 1. Let it run and observe the statistics. If you wait long enough, you'll see spikes with the load balancer style endpoints.
+
+![Load balancer spike](https://github.com/pbrumblay/lb-test/blob/master/spike.png)
+
